@@ -10,6 +10,13 @@ The frontend is a single-page React application serving as the landing page for 
 - [FullCalendar](https://fullcalendar.io/) — Interactive calendar for browsing and selecting time slots
 - [dayjs](https://day.js.org/) — Lightweight date/time manipulation
 
+## Routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | Public landing page with the booking calendar and form |
+| `/admin` | Password-protected admin dashboard for the teacher |
+
 ## Getting Started
 
 > Setup instructions coming soon.

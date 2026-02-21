@@ -9,6 +9,15 @@ The backend is a REST API that handles available time slots, booking submissions
 - [Mercado Pago Python SDK](https://github.com/mercadopago/sdk-python) — Payment integration for students in Argentina
 - [PayPal REST API](https://developer.paypal.com/api/rest/) — Payment integration for international students
 
+## API Overview
+
+| Scope | Description |
+|-------|-------------|
+| Public | Endpoints for fetching available slots and submitting bookings |
+| Admin (protected) | Endpoints for managing slot availability, viewing and managing bookings |
+
+Admin endpoints are protected via a simple authentication mechanism (e.g. HTTP Basic Auth or a static secret token) since only one user (the teacher) needs access.
+
 ## Getting Started
 
 > Setup instructions coming soon.

@@ -7,7 +7,7 @@ A landing page for an English teacher, allowing students to book classes online 
 - 📅 **Class Booking Calendar** — Browse available time slots and select one directly from the landing page
 - 📝 **Booking Form** — After selecting a slot, fill in your name, phone number, and email
 - 💳 **Payment Options** — Pay via **Mercado Pago** (for students in Argentina) or **PayPal** (for international students)
-- 🌍 **Single Landing Page** — Everything happens on one page, clean and simple
+- 🔐 **Admin Dashboard** — A password-protected route (`/admin`) where the teacher can manage slot availability, view upcoming bookings, and handle other administrative tasks
 
 ## Tech Stack
 
@@ -24,12 +24,4 @@ english_teacher/
 └── README.md
 ```
 
-## Getting Started
 
-> Setup instructions coming soon.
-
-## Notes
-
-- No authentication is required to book a class
-- Payment method is selected by the student based on their location (Argentina → Mercado Pago, abroad → PayPal)
-- Basic rate limiting is applied on the backend to prevent spam bookings
