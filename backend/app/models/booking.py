@@ -14,5 +14,7 @@ class Booking(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String(150), nullable=False)
     phone: Mapped[str] = mapped_column(String(30), nullable=False)
-    payment_method: Mapped[str] = mapped_column(String(20), nullable=False)  # "mercadopago" | "paypal"
+    payment_method: Mapped[str] = mapped_column(
+        String(20), nullable=False
+    )  # "mercadopago" | "paypal"
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

@@ -36,8 +36,23 @@ source .venv/bin/activate
 ### 3. Install dependencies
 
 ```bash
+# Runtime dependencies only
 pip install -r requirements.txt
+
+# Runtime + dev tools (linter/formatter)
+pip install -r requirements-dev.txt
 ```
+
+### 3a. (Optional) Linting and formatting
+
+[Ruff](https://docs.astral.sh/ruff/) is used for both linting and formatting.
+
+```bash
+ruff check . --fix   # find and auto-fix code quality issues (unused imports, bug patterns, etc.)
+ruff format .        # format code appearance (indentation, line length, quotes, etc.)
+```
+
+> Run `check` before `format` — linting may change code that formatting then cleans up.
 
 ### 4. Set up environment variables
 

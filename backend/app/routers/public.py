@@ -1,18 +1,16 @@
-from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models.slot import Slot
 from app.models.booking import Booking
-from app.schemas.slot import SlotRead
+from app.models.slot import Slot
 from app.schemas.booking import BookingCreate, BookingRead
+from app.schemas.slot import SlotRead
 
 router = APIRouter(prefix="/api", tags=["public"])
 
 
-@router.get("/slots", response_model=List[SlotRead])
+@router.get("/slots", response_model=list[SlotRead])
 def get_available_slots(db: Session = Depends(get_db)):
     """Return all available time slots."""
     return db.query(Slot).filter(Slot.is_available == True).all()  # noqa: E712
