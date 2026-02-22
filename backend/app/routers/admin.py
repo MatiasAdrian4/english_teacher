@@ -43,26 +43,28 @@ def list_all_slots(db: Session = Depends(get_db)):
 )
 def create_slot(payload: SlotCreate, db: Session = Depends(get_db)):
     """Create a new time slot."""
+    if payload.end_time <= payload.start_time:
+        raise HTTPException(status_code=422, detail="end_time must be after start_time")
+
+    overlapping = (
+        db.query(Slot)
+        .filter(
+            Slot.start_time < payload.end_time,
+            Slot.end_time > payload.start_time,
+        )
+        .first()
+    )
+    if overlapping:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                f"Slot overlaps with an existing slot "
+                f"({overlapping.start_time.isoformat()} – {overlapping.end_time.isoformat()})"
+            ),
+        )
+
     slot = Slot(**payload.model_dump())
     db.add(slot)
-    db.commit()
-    db.refresh(slot)
-    return slot
-
-
-@router.patch(
-    "/slots/{slot_id}/availability",
-    response_model=SlotRead,
-    dependencies=[Depends(require_admin)],
-)
-def toggle_slot_availability(
-    slot_id: int, is_available: bool, db: Session = Depends(get_db)
-):
-    """Enable or disable a time slot."""
-    slot = db.query(Slot).filter(Slot.id == slot_id).first()
-    if not slot:
-        raise HTTPException(status_code=404, detail="Slot not found")
-    slot.is_available = is_available
     db.commit()
     db.refresh(slot)
     return slot
@@ -72,10 +74,18 @@ def toggle_slot_availability(
     "/slots/{slot_id}", status_code=204, dependencies=[Depends(require_admin)]
 )
 def delete_slot(slot_id: int, db: Session = Depends(get_db)):
-    """Delete a time slot."""
+    """Delete a time slot. Fails if a booking is associated with it."""
     slot = db.query(Slot).filter(Slot.id == slot_id).first()
     if not slot:
         raise HTTPException(status_code=404, detail="Slot not found")
+
+    booking = db.query(Booking).filter(Booking.slot_id == slot_id).first()
+    if booking:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Slot has an existing booking (ref: {booking.booking_reference}). Delete the booking first.",
+        )
+
     db.delete(slot)
     db.commit()
 
@@ -95,9 +105,14 @@ def list_bookings(db: Session = Depends(get_db)):
     "/bookings/{booking_id}", status_code=204, dependencies=[Depends(require_admin)]
 )
 def delete_booking(booking_id: int, db: Session = Depends(get_db)):
-    """Delete a booking."""
+    """Delete a booking and mark the corresponding slot as available again."""
     booking = db.query(Booking).filter(Booking.id == booking_id).first()
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
+
+    slot = db.query(Slot).filter(Slot.id == booking.slot_id).first()
+    if slot:
+        slot.is_available = True
+
     db.delete(booking)
     db.commit()
