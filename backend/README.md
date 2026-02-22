@@ -86,12 +86,12 @@ uvicorn app.main:app --reload --reload-dir app --port 8080
 |-------|-------------|
 | `GET /api/slots` | List all available time slots |
 | `POST /api/bookings` | Submit a booking |
-| `GET /admin/slots` | List all slots (admin) |
-| `POST /admin/slots` | Create a slot (admin) |
-| `PATCH /admin/slots/{id}/availability` | Toggle slot availability (admin) |
-| `DELETE /admin/slots/{id}` | Delete a slot (admin) |
-| `GET /admin/bookings` | List all bookings (admin) |
-| `DELETE /admin/bookings/{id}` | Delete a booking (admin) |
+| `GET /api/admin/slots` | List all slots (admin) |
+| `POST /api/admin/slots` | Create a slot (admin) |
+| `PATCH /api/admin/slots/{id}/availability` | Toggle slot availability (admin) |
+| `DELETE /api/admin/slots/{id}` | Delete a slot (admin) |
+| `GET /api/admin/bookings` | List all bookings (admin) |
+| `DELETE /api/admin/bookings/{id}` | Delete a booking (admin) |
 | `GET /health` | Health check |
 
 Admin endpoints use **HTTP Basic Auth** — any username, password = `ADMIN_SECRET` from `.env`.

@@ -1,10 +1,11 @@
 # Frontend
 
-The frontend is a single-page React application serving as the landing page for the English teacher booking system.
+The frontend is a React SPA that serves the public booking landing page and a password-protected admin dashboard for the teacher.
 
 ## Tech Stack
 
 - [React](https://react.dev/) + [Vite](https://vitejs.dev/) — UI framework and build tool
+- [React Router](https://reactrouter.com/) — Client-side routing
 - [Tailwind CSS](https://tailwindcss.com/) — Utility-first CSS styling
 - [React Hook Form](https://react-hook-form.com/) — Lightweight form handling and validation
 - [FullCalendar](https://fullcalendar.io/) — Interactive calendar for browsing and selecting time slots
@@ -12,10 +13,11 @@ The frontend is a single-page React application serving as the landing page for 
 
 ## Routes
 
-| Route | Description |
-|-------|-------------|
-| `/` | Public landing page with the booking calendar and form |
-| `/admin` | Password-protected admin dashboard for the teacher |
+| Route | Access | Description |
+|-------|--------|-------------|
+| `/` | Public | Landing page with the booking calendar and form |
+| `/admin` | Public | Admin login screen |
+| `/admin/dashboard` | Protected | Admin dashboard (redirects to `/admin` if not authenticated) |
 
 ## Getting Started
 
@@ -39,7 +41,7 @@ npm run dev
 
 The app will be available at <http://localhost:5173>.
 
-> Make sure the backend is running at <http://localhost:8000> — the Vite dev server proxies `/api/*` requests to it automatically.
+> Make sure the backend is running at <http://localhost:8000> — the Vite dev server proxies both `/api/*` and `/api/admin/*` requests to it automatically.
 
 ### 4. Build for production
 
@@ -63,12 +65,17 @@ npm run format      # format all files in src/
 ```
 src/
 ├── api/
-│   └── client.ts          # fetch wrappers for the backend API
+│   └── client.ts              # fetch wrappers for the backend API (public + admin)
 ├── components/
-│   ├── BookingCalendar.tsx # weekly calendar with available slots
-│   └── BookingModal.tsx    # booking form modal
-├── App.tsx                 # root component
-├── main.tsx                # entry point
-├── index.css               # Tailwind directives
-└── types.ts                # shared TypeScript types
+│   ├── BookingCalendar.tsx    # weekly calendar with available slots
+│   └── BookingModal.tsx       # booking form modal
+├── context/
+│   └── AuthContext.tsx        # admin auth state (credentials, login, logout)
+├── pages/
+│   ├── LoginPage.tsx          # admin login screen
+│   └── AdminDashboardPage.tsx # admin dashboard
+├── App.tsx                    # root component with router and protected route
+├── main.tsx                   # entry point
+├── index.css                  # Tailwind directives
+└── types.ts                   # shared TypeScript types
 ```
