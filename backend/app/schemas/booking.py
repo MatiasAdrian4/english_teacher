@@ -14,6 +14,7 @@ class BookingCreate(BaseModel):
 
 class BookingRead(BookingCreate):
     id: int
+    booking_reference: str
     created_at: datetime
 
     model_config = {"from_attributes": True}
