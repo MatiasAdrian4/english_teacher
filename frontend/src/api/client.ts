@@ -25,3 +25,30 @@ export async function createBooking(
   }
   return res.json() as Promise<BookingResponse>
 }
+
+// ── Admin ──────────────────────────────────────────────────────────────────────
+
+function adminHeaders(credentials: string) {
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Basic ${credentials}`,
+  }
+}
+
+/** Verify admin credentials by hitting a protected endpoint. */
+export async function verifyAdminCredentials(credentials: string): Promise<void> {
+  const res = await fetch(`${BASE_URL}/api/admin/slots`, {
+    headers: adminHeaders(credentials),
+    cache: 'no-store', // prevent a cached 200 from masking a real 401
+  })
+  if (res.status === 401) throw new Error('Invalid credentials')
+  if (!res.ok) throw new Error('Failed to verify credentials')
+}
+
+export async function fetchAllSlots(credentials: string): Promise<Slot[]> {
+  const res = await fetch(`${BASE_URL}/api/admin/slots`, {
+    headers: adminHeaders(credentials),
+  })
+  if (!res.ok) throw new Error('Failed to fetch slots')
+  return res.json() as Promise<Slot[]>
+}

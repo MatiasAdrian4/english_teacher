@@ -11,7 +11,7 @@ from app.models.slot import Slot
 from app.schemas.booking import BookingRead
 from app.schemas.slot import SlotCreate, SlotRead
 
-router = APIRouter(prefix="/admin", tags=["admin"])
+router = APIRouter(prefix="/api/admin", tags=["admin"])
 security = HTTPBasic()
 
 
