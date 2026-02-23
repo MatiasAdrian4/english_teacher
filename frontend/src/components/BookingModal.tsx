@@ -48,11 +48,28 @@ export default function BookingModal({ slot, onClose }: Props) {
 
         {/* Slot summary */}
         <div className="px-6 pt-4 pb-2">
-          <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3 text-sm text-emerald-800">
-            <p className="font-medium">{dayjs(slot.start_time).format('dddd, MMMM D, YYYY')}</p>
+          <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3 text-sm text-emerald-800 space-y-1">
+            <div className="flex items-start justify-between gap-2">
+              <p className="font-semibold">{slot.title}</p>
+              <span
+                className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${
+                  slot.class_type === 'grupal'
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'bg-emerald-100 text-emerald-700'
+                }`}
+              >
+                {slot.class_type === 'grupal' ? 'Grupal' : 'Individual'}
+              </span>
+            </div>
+            {slot.description && <p className="text-emerald-700 text-xs">{slot.description}</p>}
+            <p>{dayjs(slot.start_time).format('dddd, MMMM D, YYYY')}</p>
             <p>
               {dayjs(slot.start_time).format('h:mm A')} – {dayjs(slot.end_time).format('h:mm A')}
             </p>
+            <div className="flex items-center gap-3 pt-0.5">
+              <span className="font-medium">${slot.price}</span>
+              <span className="capitalize text-emerald-600">{slot.required_level}</span>
+            </div>
           </div>
         </div>
 
@@ -109,20 +126,6 @@ export default function BookingModal({ slot, onClose }: Props) {
                 })}
               />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-              <input
-                type="tel"
-                placeholder="+54 9 11 1234-5678"
-                className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                  errors.phone ? 'border-red-400' : 'border-gray-300'
-                }`}
-                {...register('phone', { required: 'Phone number is required' })}
-              />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
             </div>
 
             {/* Payment method */}

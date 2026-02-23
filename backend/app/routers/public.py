@@ -25,9 +25,14 @@ def create_booking(payload: BookingCreate, db: Session = Depends(get_db)):
     if not slot.is_available:
         raise HTTPException(status_code=409, detail="Slot is no longer available")
 
-    slot.is_available = False
     booking = Booking(**payload.model_dump())
     db.add(booking)
+    db.flush()  # apply to session so count includes the new booking
+
+    booking_count = db.query(Booking).filter(Booking.slot_id == slot.id).count()
+    if booking_count >= slot.max_students:
+        slot.is_available = False
+
     db.commit()
     db.refresh(booking)
     return booking

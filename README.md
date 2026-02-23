@@ -5,7 +5,7 @@ A landing page for an English teacher, allowing students to book classes online 
 ## Features
 
 - 📅 **Class Booking Calendar** — Browse available time slots and select one directly from the landing page
-- 📝 **Booking Form** — After selecting a slot, fill in your name, phone number, and email
+- 📝 **Booking Form** — After selecting a slot, fill in your name and email
 - 💳 **Payment Options** — Pay via **Mercado Pago** (for students in Argentina) or **PayPal** (for international students)
 - 🔐 **Admin Dashboard** — A password-protected route (`/admin`) where the teacher can manage slot availability, view upcoming bookings, and handle other administrative tasks
 

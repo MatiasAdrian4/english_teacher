@@ -24,7 +24,6 @@ class Booking(Base):
     slot_id: Mapped[int] = mapped_column(ForeignKey("slots.id"), nullable=False)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String(150), nullable=False)
-    phone: Mapped[str] = mapped_column(String(30), nullable=False)
     payment_method: Mapped[str] = mapped_column(
         String(20), nullable=False
     )  # "mercadopago" | "paypal"

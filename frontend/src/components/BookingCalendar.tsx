@@ -23,7 +23,7 @@ export default function BookingCalendar({ onSlotClick }: Props) {
 
   const events = slots.map((slot) => ({
     id: String(slot.id),
-    title: '✦ Available',
+    title: slot.title,
     start: slot.start_time,
     end: slot.end_time,
     extendedProps: { slot },

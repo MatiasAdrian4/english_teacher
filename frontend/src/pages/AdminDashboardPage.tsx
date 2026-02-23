@@ -48,20 +48,41 @@ export default function AdminDashboardPage() {
     navigate('/admin')
   }
 
-  // Index bookings by slot_id for O(1) lookup
-  const bookingBySlotId: Record<number, BookingResponse> = Object.fromEntries(
-    bookings.map((b) => [b.slot_id, b]),
-  )
+  // Group bookings by slot_id
+  const bookingsBySlotId: Record<number, BookingResponse[]> = {}
+  for (const b of bookings) {
+    ;(bookingsBySlotId[b.slot_id] ??= []).push(b)
+  }
 
   const events = slots.map((slot) => {
-    const booking = bookingBySlotId[slot.id]
+    const slotBookings = bookingsBySlotId[slot.id] ?? []
+    const count = slotBookings.length
+    const isFull = count >= slot.max_students
+    const isPartial = count > 0 && !isFull
+
+    const label =
+      slot.max_students > 1 ? `${slot.title} (${count}/${slot.max_students})` : slot.title
+
     return {
       id: String(slot.id),
-      title: booking ? booking.name : 'Available',
+      title: label,
       start: slot.start_time,
       end: slot.end_time,
-      backgroundColor: booking ? '#dc2626' : slot.is_available ? '#16a34a' : '#6b7280',
-      borderColor: booking ? '#b91c1c' : slot.is_available ? '#15803d' : '#4b5563',
+      // full → red | partial → amber | available → green | disabled → gray
+      backgroundColor: isFull
+        ? '#dc2626'
+        : isPartial
+          ? '#d97706'
+          : slot.is_available
+            ? '#16a34a'
+            : '#6b7280',
+      borderColor: isFull
+        ? '#b91c1c'
+        : isPartial
+          ? '#b45309'
+          : slot.is_available
+            ? '#15803d'
+            : '#4b5563',
       textColor: '#ffffff',
     }
   })
@@ -105,8 +126,12 @@ export default function AdminDashboardPage() {
             Available
           </span>
           <span className="flex items-center gap-2">
+            <span className="inline-block w-3 h-3 rounded-full bg-amber-600" />
+            Partially booked
+          </span>
+          <span className="flex items-center gap-2">
             <span className="inline-block w-3 h-3 rounded-full bg-red-600" />
-            Booked
+            Full
           </span>
           <span className="flex items-center gap-2">
             <span className="inline-block w-3 h-3 rounded-full bg-gray-500" />
@@ -154,7 +179,7 @@ export default function AdminDashboardPage() {
       {selectedSlot && (
         <SlotDetailModal
           slot={selectedSlot}
-          booking={bookingBySlotId[selectedSlot.id] ?? null}
+          bookings={bookingsBySlotId[selectedSlot.id] ?? []}
           onClose={() => setSelectedSlot(null)}
           onMutated={() => {
             setSelectedSlot(null)
@@ -165,4 +190,3 @@ export default function AdminDashboardPage() {
     </div>
   )
 }
-

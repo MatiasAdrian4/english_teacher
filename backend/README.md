@@ -6,8 +6,10 @@ The backend is a REST API that handles available time slots, booking submissions
 
 - [FastAPI](https://fastapi.tiangolo.com/) — High-performance Python web framework with automatic Swagger docs
 - [SQLAlchemy](https://www.sqlalchemy.org/) + SQLite — ORM and database (SQLite for simplicity; easy to migrate to PostgreSQL)
-- [Mercado Pago Python SDK](https://github.com/mercadopago/sdk-python) — Payment integration for students in Argentina
-- [PayPal REST API](https://developer.paypal.com/api/rest/) — Payment integration for international students
+- [Pydantic v2](https://docs.pydantic.dev/) — Data validation and serialization
+- [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) — Environment variable management
+- [Mercado Pago Python SDK](https://github.com/mercadopago/sdk-python) — Payment integration for students in Argentina *(planned)*
+- [PayPal REST API](https://developer.paypal.com/api/rest/) — Payment integration for international students *(planned)*
 
 ## API Overview
 
@@ -88,7 +90,6 @@ uvicorn app.main:app --reload --reload-dir app --port 8080
 | `POST /api/bookings` | Submit a booking |
 | `GET /api/admin/slots` | List all slots (admin) |
 | `POST /api/admin/slots` | Create a slot (admin) |
-| `PATCH /api/admin/slots/{id}/availability` | Toggle slot availability (admin) |
 | `DELETE /api/admin/slots/{id}` | Delete a slot (admin) |
 | `GET /api/admin/bookings` | List all bookings (admin) |
 | `DELETE /api/admin/bookings/{id}` | Delete a booking (admin) |

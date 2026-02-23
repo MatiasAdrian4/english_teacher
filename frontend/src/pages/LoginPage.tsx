@@ -36,7 +36,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-sm w-full max-w-sm p-8">
-
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900">Admin Login</h1>
@@ -44,7 +43,6 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
           {/* Username */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
@@ -91,7 +89,6 @@ export default function LoginPage() {
           >
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
-
         </form>
       </div>
     </div>

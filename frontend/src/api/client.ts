@@ -62,8 +62,19 @@ export async function fetchAllBookings(credentials: string): Promise<BookingResp
 }
 
 export interface SlotCreatePayload {
+  title: string
+  description?: string
   start_time: string
   end_time: string
+  price: number
+  required_level:
+    | 'beginner'
+    | 'pre-intermediate'
+    | 'intermediate'
+    | 'upper-intermediate'
+    | 'advanced'
+    | 'proficient'
+  max_students: number
 }
 
 export async function createAdminSlot(
@@ -93,10 +104,7 @@ export async function deleteAdminSlot(credentials: string, slotId: number): Prom
   }
 }
 
-export async function deleteAdminBooking(
-  credentials: string,
-  bookingId: number,
-): Promise<void> {
+export async function deleteAdminBooking(credentials: string, bookingId: number): Promise<void> {
   const res = await fetch(`${BASE_URL}/api/admin/bookings/${bookingId}`, {
     method: 'DELETE',
     headers: adminHeaders(credentials),

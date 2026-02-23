@@ -83,7 +83,7 @@ def delete_slot(slot_id: int, db: Session = Depends(get_db)):
     if booking:
         raise HTTPException(
             status_code=409,
-            detail=f"Slot has an existing booking (ref: {booking.booking_reference}). Delete the booking first.",
+            detail="This slot has active bookings. Cancel all bookings before deleting the slot.",
         )
 
     db.delete(slot)
@@ -105,14 +105,18 @@ def list_bookings(db: Session = Depends(get_db)):
     "/bookings/{booking_id}", status_code=204, dependencies=[Depends(require_admin)]
 )
 def delete_booking(booking_id: int, db: Session = Depends(get_db)):
-    """Delete a booking and mark the corresponding slot as available again."""
+    """Delete a booking and re-open the slot if it drops below max capacity."""
     booking = db.query(Booking).filter(Booking.id == booking_id).first()
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
 
     slot = db.query(Slot).filter(Slot.id == booking.slot_id).first()
-    if slot:
-        slot.is_available = True
-
     db.delete(booking)
+    db.flush()  # apply deletion so count reflects the removal
+
+    if slot:
+        remaining = db.query(Booking).filter(Booking.slot_id == slot.id).count()
+        if remaining < slot.max_students:
+            slot.is_available = True
+
     db.commit()

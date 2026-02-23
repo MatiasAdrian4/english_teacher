@@ -5,8 +5,19 @@ import { useAuth } from '../../context/AuthContext'
 import { createAdminSlot } from '../../api/client'
 
 interface FormValues {
+  title: string
+  description: string
   start_time: string
   end_time: string
+  price: string
+  required_level:
+    | 'beginner'
+    | 'pre-intermediate'
+    | 'intermediate'
+    | 'upper-intermediate'
+    | 'advanced'
+    | 'proficient'
+  max_students: string
 }
 
 interface Props {
@@ -59,8 +70,13 @@ export default function AddSlotModal({ onClose, onCreated }: Props) {
     setServerError(null)
     try {
       await createAdminSlot(credentials, {
+        title: data.title,
+        description: data.description || undefined,
         start_time: data.start_time,
         end_time: data.end_time,
+        price: parseFloat(data.price),
+        required_level: data.required_level,
+        max_students: parseInt(data.max_students, 10),
       })
       onCreated()
     } catch (e) {
@@ -82,8 +98,33 @@ export default function AddSlotModal({ onClose, onCreated }: Props) {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Start</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+            <input
+              type="text"
+              placeholder="e.g. Conversation Practice"
+              {...register('title', { required: 'Title is required' })}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+            {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description <span className="text-gray-400 font-normal">(optional)</span>
+            </label>
+            <textarea
+              placeholder="Topics covered, what students should prepare, etc."
+              rows={2}
+              {...register('description')}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+            />
+          </div>
+
+          {/* Start */}
+          <div>
             <input
               type="datetime-local"
               {...register('start_time', { required: 'Start time is required' })}
@@ -99,7 +140,9 @@ export default function AddSlotModal({ onClose, onCreated }: Props) {
           </div>
 
           <div>
-            <label className={`block text-sm font-medium mb-2 ${!startTime ? 'text-gray-400' : 'text-gray-700'}`}>
+            <label
+              className={`block text-sm font-medium mb-2 ${!startTime ? 'text-gray-400' : 'text-gray-700'}`}
+            >
               Duration
             </label>
             <div className="flex gap-2">
@@ -124,7 +167,9 @@ export default function AddSlotModal({ onClose, onCreated }: Props) {
           </div>
 
           <div>
-            <label className={`block text-sm font-medium mb-1 ${!startTime ? 'text-gray-400' : 'text-gray-700'}`}>
+            <label
+              className={`block text-sm font-medium mb-1 ${!startTime ? 'text-gray-400' : 'text-gray-700'}`}
+            >
               End
               {activeDuration && (
                 <span className="ml-2 text-xs text-gray-400 font-normal">(auto-calculated)</span>
@@ -136,8 +181,7 @@ export default function AddSlotModal({ onClose, onCreated }: Props) {
               min={startTime}
               {...register('end_time', {
                 required: 'End time is required',
-                validate: (value) =>
-                  !startTime || value > startTime || 'End must be after start',
+                validate: (value) => !startTime || value > startTime || 'End must be after start',
               })}
               onChange={(e) => {
                 void register('end_time').onChange(e)
@@ -147,6 +191,61 @@ export default function AddSlotModal({ onClose, onCreated }: Props) {
             />
             {errors.end_time && (
               <p className="text-red-500 text-xs mt-1">{errors.end_time.message}</p>
+            )}
+          </div>
+
+          {/* Price + Max Students */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+                {...register('price', {
+                  required: 'Price is required',
+                  min: { value: 0, message: 'Must be ≥ 0' },
+                })}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price.message}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Max Students</label>
+              <input
+                type="number"
+                min="1"
+                defaultValue={1}
+                {...register('max_students', {
+                  required: 'Required',
+                  min: { value: 1, message: 'At least 1' },
+                })}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {errors.max_students && (
+                <p className="text-red-500 text-xs mt-1">{errors.max_students.message}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Required Level */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Required Level</label>
+            <select
+              {...register('required_level', { required: 'Level is required' })}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option value="">Select a level…</option>
+              <option value="beginner">Beginner</option>
+              <option value="pre-intermediate">Pre-Intermediate</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="upper-intermediate">Upper-Intermediate</option>
+              <option value="advanced">Advanced</option>
+              <option value="proficient">Proficient</option>
+            </select>
+            {errors.required_level && (
+              <p className="text-red-500 text-xs mt-1">{errors.required_level.message}</p>
             )}
           </div>
 

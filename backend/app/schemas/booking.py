@@ -8,7 +8,6 @@ class BookingCreate(BaseModel):
     slot_id: int
     name: str
     email: EmailStr
-    phone: str
     payment_method: Literal["mercadopago", "paypal"]
 
 

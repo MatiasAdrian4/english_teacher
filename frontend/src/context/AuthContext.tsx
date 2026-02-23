@@ -27,7 +27,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setCredentials(null)
   }
 
-  return <AuthContext.Provider value={{ credentials, login, logout }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ credentials, login, logout }}>{children}</AuthContext.Provider>
+  )
 }
 
 export function useAuth() {
