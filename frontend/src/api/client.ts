@@ -52,3 +52,57 @@ export async function fetchAllSlots(credentials: string): Promise<Slot[]> {
   if (!res.ok) throw new Error('Failed to fetch slots')
   return res.json() as Promise<Slot[]>
 }
+
+export async function fetchAllBookings(credentials: string): Promise<BookingResponse[]> {
+  const res = await fetch(`${BASE_URL}/api/admin/bookings`, {
+    headers: adminHeaders(credentials),
+  })
+  if (!res.ok) throw new Error('Failed to fetch bookings')
+  return res.json() as Promise<BookingResponse[]>
+}
+
+export interface SlotCreatePayload {
+  start_time: string
+  end_time: string
+}
+
+export async function createAdminSlot(
+  credentials: string,
+  payload: SlotCreatePayload,
+): Promise<Slot> {
+  const res = await fetch(`${BASE_URL}/api/admin/slots`, {
+    method: 'POST',
+    headers: adminHeaders(credentials),
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as { detail?: string }).detail ?? 'Failed to create slot')
+  }
+  return res.json() as Promise<Slot>
+}
+
+export async function deleteAdminSlot(credentials: string, slotId: number): Promise<void> {
+  const res = await fetch(`${BASE_URL}/api/admin/slots/${slotId}`, {
+    method: 'DELETE',
+    headers: adminHeaders(credentials),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as { detail?: string }).detail ?? 'Failed to delete slot')
+  }
+}
+
+export async function deleteAdminBooking(
+  credentials: string,
+  bookingId: number,
+): Promise<void> {
+  const res = await fetch(`${BASE_URL}/api/admin/bookings/${bookingId}`, {
+    method: 'DELETE',
+    headers: adminHeaders(credentials),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as { detail?: string }).detail ?? 'Failed to cancel booking')
+  }
+}

@@ -66,8 +66,8 @@ export default function BookingCalendar({ onSlotClick }: Props) {
           right: '',
         }}
         allDaySlot={false}
-        slotMinTime="00:00:00"
-        slotMaxTime="24:00:00"
+        slotMinTime="09:00:00"
+        slotMaxTime="23:00:00"
         height="auto"
         eventCursor="pointer"
         eventDisplay="block"
