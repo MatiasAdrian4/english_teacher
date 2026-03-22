@@ -59,26 +59,3 @@ npm run format      # format all files in src/
 ```
 
 > Run `lint:fix` before `format` — linting may change code that formatting then cleans up.
-
-## Project Structure
-
-```
-src/
-├── api/
-│   └── client.ts              # fetch wrappers for the backend API (public + admin)
-├── components/
-│   ├── admin/
-│   │   ├── AddSlotModal.tsx    # modal form to create a new slot
-│   │   └── SlotDetailModal.tsx # slot info + enrolled students + cancel/delete actions
-│   ├── BookingCalendar.tsx    # weekly calendar with available slots
-│   └── BookingModal.tsx       # booking form modal
-├── context/
-│   └── AuthContext.tsx        # admin auth state (credentials, login, logout)
-├── pages/
-│   ├── LoginPage.tsx          # admin login screen
-│   └── AdminDashboardPage.tsx # admin dashboard
-├── App.tsx                    # root component with router and protected route
-├── main.tsx                   # entry point
-├── index.css                  # Tailwind directives
-└── types.ts                   # shared TypeScript types
-```

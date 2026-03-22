@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* FullCalendar slot sizing */
+.fc-timegrid-slot {
+  height: 40px !important;
+}
+
+/* Custom event content */
+.fc-custom-event {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 3px 5px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fc-custom-event-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fc-custom-event-tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 9999px;
+  line-height: 1.4;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.tag-individual {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.tag-grupal {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}

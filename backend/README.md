@@ -82,17 +82,3 @@ Interactive docs (Swagger UI) at <http://localhost:8000/docs>.
 uvicorn app.main:app --reload --reload-dir app --port 8080
 ```
 
-## API Overview
-
-| Scope | Description |
-|-------|-------------|
-| `GET /api/slots` | List all available time slots |
-| `POST /api/bookings` | Submit a booking |
-| `GET /api/admin/slots` | List all slots (admin) |
-| `POST /api/admin/slots` | Create a slot (admin) |
-| `DELETE /api/admin/slots/{id}` | Delete a slot (admin) |
-| `GET /api/admin/bookings` | List all bookings (admin) |
-| `DELETE /api/admin/bookings/{id}` | Delete a booking (admin) |
-| `GET /health` | Health check |
-
-Admin endpoints use **HTTP Basic Auth** — any username, password = `ADMIN_SECRET` from `.env`.

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import type { EventClickArg } from '@fullcalendar/core'
+import type { EventClickArg, EventContentArg } from '@fullcalendar/core'
 import { fetchAvailableSlots } from '../api/client'
 import type { Slot } from '../types'
 
@@ -35,6 +35,19 @@ export default function BookingCalendar({ onSlotClick }: Props) {
   function handleEventClick(info: EventClickArg) {
     const slot = info.event.extendedProps.slot as Slot
     onSlotClick(slot)
+  }
+
+  function renderEventContent(arg: EventContentArg) {
+    const slot = arg.event.extendedProps.slot as Slot
+    const isGrupal = slot.class_type === 'grupal'
+    return (
+      <div className="fc-custom-event">
+        <span className={`fc-custom-event-tag ${isGrupal ? 'tag-grupal' : 'tag-individual'}`}>
+          {isGrupal ? 'Group' : 'Individual'}
+        </span>
+        <div className="fc-custom-event-title">{arg.event.title}</div>
+      </div>
+    )
   }
 
   if (loading) {
@@ -71,6 +84,7 @@ export default function BookingCalendar({ onSlotClick }: Props) {
         height="auto"
         eventCursor="pointer"
         eventDisplay="block"
+        eventContent={renderEventContent}
       />
     </div>
   )
